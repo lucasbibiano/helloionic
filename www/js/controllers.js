@@ -3,7 +3,12 @@ angular.module('starter.controllers', [])
 .controller('DashCtrl', function($scope) {})
 
 .controller('MusicsCtrl', function($scope, Musics) {
-  $scope.musics = Musics.all();
+  $scope.groupedMusics = _.groupBy(Musics.all(), function (music) {
+    return music.name[0];
+  });
+
+  console.log($scope.musics);
+
   $scope.remove = function(music) {
     Musics.remove(music);
   }

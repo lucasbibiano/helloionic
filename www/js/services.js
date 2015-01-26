@@ -16,6 +16,12 @@ angular.module('starter.services', [])
       name: 'Eu perdido pecador',
       artist: 'Desconhecido',
       tags: ['Cantor Cristão', 'Hino']
+    },
+    {
+      id: 2,
+      name: 'Achei um Grande Amigo',
+      artist: 'Desconhecido',
+      tags: ['Cantor Cristão', 'Hino']
     }
   ]
 

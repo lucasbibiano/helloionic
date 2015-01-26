@@ -1,17 +1,34 @@
 <ion-view view-title="Musics">
   <ion-content>
     <ion-list>
-      <ion-item class="item-remove-animate item-icon-right music" ng-repeat="music in musics" type="item-text-wrap" href="#/tab/musics/{{music.id}}">
-        <h2>{{music.name}}</h2>
-        <i class="icon ion-chevron-right icon-accessory"></i>
+    <div class="bar bar-header item-input-inset">
+      <label class="item-input-wrapper">
+        <i class="icon ion-ios7-search placeholder-icon"></i>
+        <input ng-model="query" type="search" placeholder="Search">
+      </label>
+      <button class="button button-clear" ng-click="query = null">
+        Cancel
+      </button>
+    </div>
 
-        <ion-scroll direction="x" class="wide-as-needed tag-list">
-          <a class="button button-small tag" ng-repeat="tag in music.tags track by $index">
-            {{tag}}
-          </a>
-        </ion-scroll>
+      <div ng-repeat="(group, musics) in groupedMusics">
+        
+        <ion-item class="item-divider" ng-show="(musics | filter:query).length > 0">{{group}}</ion-item>
 
-      </ion-item>
+        <ion-item class="item-remove-animate item-icon-right music" ng-repeat="music in musics | filter:query" type="item-text-wrap">
+          <h2>{{music.name}}</h2>
+          <a href="#/tab/musics/{{music.id}}"><i class="icon ion-chevron-right icon-accessory"></i></a>
+
+          <ion-scroll direction="x" class="wide-as-needed tag-list">
+            <a class="button button-small tag" ng-repeat="tag in music.tags track by $index">
+              {{tag}}
+            </a>
+          </ion-scroll>
+
+        </ion-item>
+
+      </div>
+
     </ion-list>
   </ion-content>
 </ion-view>
