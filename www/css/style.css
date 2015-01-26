@@ -1,0 +1,21 @@
+/* Empty. Add your own CSS if you like */
+
+.tag-list .scroll > :first-child { margin-left: 0 !important; }
+
+.tag-list {
+  margin-top: 1em;
+}
+
+.tag {
+  margin-left: 1em;
+}
+
+/* horizontal buttons */
+
+.wide-as-needed {
+  overflow: scroll;
+  white-space: nowrap;
+}
+.scroll { 
+  min-width: 100%;
+}

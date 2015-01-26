@@ -1,0 +1,17 @@
+<ion-view view-title="Musics">
+  <ion-content>
+    <ion-list>
+      <ion-item class="item-remove-animate item-icon-right music" ng-repeat="music in musics" type="item-text-wrap" href="#/tab/musics/{{music.id}}">
+        <h2>{{music.name}}</h2>
+        <i class="icon ion-chevron-right icon-accessory"></i>
+
+        <ion-scroll direction="x" class="wide-as-needed tag-list">
+          <a class="button button-small tag" ng-repeat="tag in music.tags track by $index">
+            {{tag}}
+          </a>
+        </ion-scroll>
+
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>
