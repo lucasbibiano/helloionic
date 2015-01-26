@@ -1,29 +1,62 @@
+function randomWord(len) {
+  var vowels = ['a', 'e', 'i', 'o', 'u'];
+  var consts =  ['b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'qu', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z', 'tt', 'ch', 'sh'];
+
+  var word = '';
+
+  var is_vowel = false;
+
+  var arr;
+
+  for (var i = 0; i < len; i++) {
+
+    if (is_vowel) arr = vowels
+    else arr = consts
+    is_vowel = !is_vowel;
+
+    word += arr[Math.round(Math.random()*(arr.length-1))];
+  }
+
+  return word;
+}
+
+function randomPhrase(len) {
+  var result = "";
+  
+  _(len).times(function() {
+    result += randomWord(Math.floor((Math.random() * 10) + 1)) + " ";
+  });
+
+  return result;
+}
+
+function randomMusic() {
+  var nTags = Math.floor((Math.random() * 10) + 1);
+  var name = randomPhrase(Math.floor((Math.random() * 10) + 1));
+
+  var arr = [];
+
+  _(nTags).times(function() {
+    arr.push(randomWord(Math.floor((Math.random() * 10) + 1)));
+  });
+
+  return {
+    name: name,
+    tags: arr
+  }
+}
+
 angular.module('starter.services', [])
 
 .factory('Musics', function() {
   // Might use a resource here that returns a JSON array
 
   // Some fake testing data
-  var musics = [
-    {
-      id: 0,
-      name: 'A ele a glória',
-      artist: 'Diante do Trono',
-      tags: ['Louvor', 'Diante do Trono', 'Rock', 'Paper', 'Scissors', 'Random', 'Outros']
-    },
-    {
-      id: 1,
-      name: 'Eu perdido pecador',
-      artist: 'Desconhecido',
-      tags: ['Cantor Cristão', 'Hino']
-    },
-    {
-      id: 2,
-      name: 'Achei um Grande Amigo',
-      artist: 'Desconhecido',
-      tags: ['Cantor Cristão', 'Hino']
-    }
-  ]
+  var musics = []
+
+  _(100).times(function() {
+    musics.push(randomMusic());
+  });
 
   return {
     all: function() {
