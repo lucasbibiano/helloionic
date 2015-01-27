@@ -1,3 +1,7 @@
+function randomDate(start, end) {
+    return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+}
+
 function randomWord(len) {
   var vowels = ['a', 'e', 'i', 'o', 'u'];
   var consts =  ['b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'qu', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z', 'tt', 'ch', 'sh'];
@@ -42,7 +46,9 @@ function randomMusic() {
 
   return {
     name: name,
-    tags: arr
+    tags: arr,
+    artist: randomPhrase(Math.floor((Math.random() * 5) + 1)),
+    lastPlayed: randomDate(new Date(2012, 0, 1), new Date())
   }
 }
 
@@ -52,10 +58,13 @@ angular.module('starter.services', [])
   // Might use a resource here that returns a JSON array
 
   // Some fake testing data
-  var musics = []
+  var musics = [];
+  var selected = [];
 
-  _(100).times(function() {
-    musics.push(randomMusic());
+  _(100).times(function(i) {
+    var music = randomMusic();
+    music.id = i;
+    musics.push(music);
   });
 
   return {
@@ -72,53 +81,21 @@ angular.module('starter.services', [])
         }
       }
       return null;
-    }
-  }
-})
-
-/**
- * A simple example service that returns some data.
- */
-.factory('Friends', function() {
-  // Might use a resource here that returns a JSON array
-
-  // Some fake testing data
-  // Some fake testing data
-  var friends = [{
-    id: 0,
-    name: 'Ben Sparrow',
-    notes: 'Enjoys drawing things',
-    face: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png'
-  }, {
-    id: 1,
-    name: 'Max Lynx',
-    notes: 'Odd obsession with everything',
-    face: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
-  }, {
-    id: 2,
-    name: 'Andrew Jostlen',
-    notes: 'Wears a sweet leather Jacket. I\'m a bit jealous',
-    face: 'https://pbs.twimg.com/profile_images/491274378181488640/Tti0fFVJ.jpeg'
-  }, {
-    id: 3,
-    name: 'Adam Bradleyson',
-    notes: 'I think he needs to buy a boat',
-    face: 'https://pbs.twimg.com/profile_images/479090794058379264/84TKj_qa.jpeg'
-  }, {
-    id: 4,
-    name: 'Perry Governor',
-    notes: 'Just the nicest guy',
-    face: 'https://pbs.twimg.com/profile_images/491995398135767040/ie2Z_V6e.jpeg'
-  }];
-
-
-  return {
-    all: function() {
-      return friends;
     },
-    get: function(friendId) {
-      // Simple index lookup
-      return friends[friendId];
-    }
+    select: function(musicId) {
+      selected.push(musics[musicId]);
+      console.log(selected);
+    },
+    unselect: function(musicId) {
+      for (var i = 0; i < musics.length; ++i) {
+        if (musics[i].id === parseInt(musicId)) {
+          selected.splice(i, 1);
+
+          console.log(selected);
+
+          return selected[i];
+        }
+      }
+    },
   }
 });

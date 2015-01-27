@@ -10,10 +10,8 @@
   margin-left: 1em;
 }
 
-/* horizontal buttons */
-
 .wide-as-needed {
-  overflow: scroll;
+  overflow-x: scroll;
   white-space: nowrap;
 }
 .scroll { 

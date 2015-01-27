@@ -67,12 +67,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       }
     })
 
-  .state('tab.friends', {
-      url: '/friends',
+  .state('tab.choose', {
+      url: '/choose',
       views: {
-        'tab-friends': {
-          templateUrl: 'templates/tab-friends.html',
-          controller: 'FriendsCtrl'
+        'tab-choose': {
+          templateUrl: 'templates/tab-choose.html',
+          controller: 'MusicsCtrl'
         }
       }
     })

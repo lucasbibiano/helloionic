@@ -7,19 +7,17 @@ angular.module('starter.controllers', [])
     return music.name[0];
   });
 
-  console.log($scope.musics);
-
   $scope.remove = function(music) {
     Musics.remove(music);
-  }
+  };
+
+  $scope.select = function(music) {
+    Musics.select(music);
+  };
 })
 
-.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
-  $scope.chat = Chats.get($stateParams.chatId);
-})
-
-.controller('FriendsCtrl', function($scope, Friends) {
-  $scope.friends = Friends.all();
+.controller('ChooseCtrl', function($scope, Friends) {
+  $scope.musics = Musics.all();
 })
 
 .controller('FriendDetailCtrl', function($scope, $stateParams, Friends) {
