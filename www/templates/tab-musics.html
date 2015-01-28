@@ -1,40 +1,29 @@
-<ion-view view-title="Músicas">
+<ion-view view-title="Músicas | Selecionadas: {{selected().length}}">
   <ion-content>
     <ion-list>
-    <div class="bar bar-header item-input-inset">
-      <label class="item-input-wrapper">
-        <i class="icon ion-ios7-search placeholder-icon"></i>
-        <input ng-model="query" type="search" placeholder="Search">
-      </label>
-      <button class="button button-clear button-stable icon ion-close" ng-click="query = null">
-      </button>
-    </div>
+      <div class="bar bar-header item-input-inset">
+        <label class="item-input-wrapper">
+          <i class="icon ion-ios7-search placeholder-icon"></i>
+          <input ng-model="query" type="search" placeholder="Search">
+        </label>
+        <button class="button button-clear button-stable icon ion-close" ng-click="query = null">
+        </button>
+      </div>
 
       <div ng-repeat="(group, musics) in groupedMusics">
         
         <ion-item class="item-divider" ng-show="(musics | filter:query).length > 0">{{group}}</ion-item>
 
-        <ion-item class="item-remove-animate item-icon-right music" ng-repeat="music in musics | filter:query" type="item-text-wrap">
+        <ion-item class="item-remove-animate item-icon-right music" ng-class="{'music-selected': isSelected(music)}" ng-repeat="music in musics | filter:query" type="item-text-wrap" on-hold="showOpts(music)">
           <h2>{{music.name}}</h2>
           <p>Artista: {{music.artist}}</p>
-          <p>Tocada pela última vez em: {{music.lastPlayed | date:'dd/MM/yyyy'}}
-          <a href="#/tab/musics/{{music.id}}">
-            <i class="icon ion-information-circled icon-accessory"></i>
-          </a>
+          <p>Tocada pela última vez em: {{music.lastPlayed | date:'dd/MM/yyyy'}}</p>
 
           <ion-scroll direction="x" class="wide-as-needed tag-list">
             <a class="button button-small tag" ng-repeat="tag in music.tags track by $index">
               {{tag}}
             </a>
           </ion-scroll>
-
-          <ion-option-button ng-click="remove(music.id)">
-            <i class="icon ion-trash-a"></i>
-          </ion-option-button>        
-
-          <ion-option-button ng-click="select(music.id)">
-            <i class="icon ion-plus-round"></i>
-          </ion-option-button>
 
         </ion-item>
 

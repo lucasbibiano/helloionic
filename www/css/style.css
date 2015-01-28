@@ -17,3 +17,7 @@
 .scroll { 
   min-width: 100%;
 }
+
+.music-selected {
+  background: #33cd5f;
+}

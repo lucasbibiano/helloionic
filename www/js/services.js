@@ -82,20 +82,16 @@ angular.module('starter.services', [])
       }
       return null;
     },
-    select: function(musicId) {
-      selected.push(musics[musicId]);
+    selected: function() {
+      return selected;
+    },
+    select: function(music) {
+      selected.push(music);
+      selected = _.uniq(selected, function(item) { return item.id });
       console.log(selected);
     },
-    unselect: function(musicId) {
-      for (var i = 0; i < musics.length; ++i) {
-        if (musics[i].id === parseInt(musicId)) {
-          selected.splice(i, 1);
-
-          console.log(selected);
-
-          return selected[i];
-        }
-      }
-    },
+    unselect: function(music) {
+      selected = _.reject(selected, function(m) { return m.id === music.id })
+    }
   }
 });
