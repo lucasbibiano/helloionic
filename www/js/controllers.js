@@ -8,6 +8,10 @@ angular.module('starter.controllers', [])
     return music.name[0];
   });
 
+  $scope.clearSelected = function() {
+    Musics.clearSelected();
+  };
+
   $scope.selected = function() { return Musics.selected(); };
 
   $scope.remove = function(music) {

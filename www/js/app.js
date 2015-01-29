@@ -67,11 +67,11 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       }
     })
 
-  .state('tab.choose', {
-      url: '/choose',
+  .state('tab.selected', {
+      url: '/selected',
       views: {
-        'tab-choose': {
-          templateUrl: 'templates/tab-choose.html',
+        'tab-selected': {
+          templateUrl: 'templates/tab-selected.html',
           controller: 'MusicsCtrl'
         }
       }

@@ -21,3 +21,11 @@
 .music-selected {
   background: #33cd5f;
 }
+
+.selected-list {
+  margin-bottom: 1em;
+}
+
+.display-none {
+  display: none;
+}

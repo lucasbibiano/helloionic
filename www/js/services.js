@@ -55,7 +55,6 @@ function randomMusic() {
 angular.module('starter.services', [])
 
 .factory('Musics', function() {
-  // Might use a resource here that returns a JSON array
 
   // Some fake testing data
   var musics = [];
@@ -66,6 +65,10 @@ angular.module('starter.services', [])
     music.id = i;
     musics.push(music);
   });
+
+  selected.push(musics[0]);
+  selected.push(musics[1]);
+  selected.push(musics[2]);
 
   return {
     all: function() {
@@ -92,6 +95,9 @@ angular.module('starter.services', [])
     },
     unselect: function(music) {
       selected = _.reject(selected, function(m) { return m.id === music.id })
+    },
+    clearSelected: function() {
+      selected = [];
     }
   }
 });

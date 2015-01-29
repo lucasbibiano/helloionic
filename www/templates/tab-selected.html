@@ -1,0 +1,27 @@
+<ion-view view-title="Selecionadas">
+  <ion-content>
+    <ion-list class="selected-list">
+      <ion-item class="item-remove-animate item-icon-right music" ng-repeat="music in selected()" type="item-text-wrap" on-hold="showOpts(music)">
+        <h2>{{music.name}}</h2>
+        <p>Artista: {{music.artist}}</p>
+        <p>Tocada pela última vez em: {{music.lastPlayed | date:'dd/MM/yyyy'}}</p>
+
+        <ion-scroll direction="x" class="wide-as-needed tag-list">
+          <a class="button button-small tag" ng-repeat="tag in music.tags track by $index">
+            {{tag}}
+          </a>
+        </ion-scroll>
+
+      </ion-item>
+    </ion-list>
+
+    <div class="row" ng-class="{'display-none': selected().length == 0 }">
+      <button class="button icon-left button-outline ion-checkmark button-balanced col-50" ng-click="confirmSelection()">Confirmar Seleção</button>
+      <button class="button icon-left button-outline ion-close button-assertive col-50" ng-click="clearSelected()">Limpar Seleção</button>
+    </div>
+
+    <div class="row" ng-class="{'display-none': selected().length > 0 }">
+      <h2>Nenhuma música selecionada</h2>
+    </div>
+  </ion-content>
+</ion-view>
