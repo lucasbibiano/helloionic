@@ -1,0 +1,10 @@
+<ion-view view-title="Seleções">
+  <ion-content>
+    <ion-list>
+      <ion-item ng-repeat="selection in selections" href="#/tab/selections/{{selection.id}}">
+        <h2>{{selection.name}}</h2>
+        <p>{{selection.date | date:'dd/MM/yyyy'}}</p>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

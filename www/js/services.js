@@ -100,4 +100,35 @@ angular.module('starter.services', [])
       selected = [];
     }
   }
+})
+
+.factory('Selections', function(Musics) {
+  var selections = [];
+
+  _(10).times(function(i) {
+    var selection = { 
+      date: randomDate(new Date(2012, 0, 1), new Date()),
+      name: randomPhrase(Math.floor((Math.random() * 5) + 1)),
+      id: i
+    };
+
+    selection.musics = [];
+
+    selection.musics = _.sample(Musics.all(), 6);
+
+    selections.push(selection);
+
+  });
+
+  return {
+    all: function() {
+      return selections;
+    },
+    get: function(id) {
+      return _.find(selections, function(s) {
+        return s.id == id;
+      });
+    }
+  }
+
 });

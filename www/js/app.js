@@ -49,52 +49,43 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
   })
 
   .state('tab.musics', {
-      url: '/musics',
-      views: {
-        'tab-musics': {
-          templateUrl: 'templates/tab-musics.html',
-          controller: 'MusicsCtrl'
-        }
-      }
-    })
-    .state('tab.chat-detail', {
-      url: '/chats/:chatId',
-      views: {
-        'tab-chats': {
-          templateUrl: 'templates/chat-detail.html',
-          controller: 'ChatDetailCtrl'
-        }
-      }
-    })
-
-  .state('tab.selected', {
-      url: '/selected',
-      views: {
-        'tab-selected': {
-          templateUrl: 'templates/tab-selected.html',
-          controller: 'MusicsCtrl'
-        }
-      }
-    })
-    .state('tab.friend-detail', {
-      url: '/friend/:friendId',
-      views: {
-        'tab-friends': {
-          templateUrl: 'templates/friend-detail.html',
-          controller: 'FriendDetailCtrl'
-        }
-      }
-    })
-
-  .state('tab.account', {
-    url: '/account',
+    url: '/musics',
     views: {
-      'tab-account': {
-        templateUrl: 'templates/tab-account.html',
-        controller: 'AccountCtrl'
+      'tab-musics': {
+        templateUrl: 'templates/tab-musics.html',
+        controller: 'MusicsCtrl'
       }
     }
-  });
+  })
+
+  .state('tab.selected', {
+    url: '/selected',
+    views: {
+      'tab-selected': {
+        templateUrl: 'templates/tab-selected.html',
+        controller: 'MusicsCtrl'
+      }
+    }
+  })
+
+  .state('tab.selections', {
+    url: '/selections',
+    views: {
+      'tab-selections': {
+        templateUrl: 'templates/tab-selections.html',
+        controller: 'SelectionsCtrl'
+      }
+    }
+  })
+    .state('tab.selection-detail', {
+      url: '/selections/:selectionId',
+      views: {
+        'tab-selections': {
+          templateUrl: 'templates/selection-detail.html',
+          controller: 'SelectionCtrl'
+        }
+      }
+    });
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/tab/dash');

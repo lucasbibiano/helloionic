@@ -49,7 +49,7 @@ angular.module('starter.controllers', [])
             Musics.unselect(music);
           }
         } else if (index === 1) {
-          $window.location.href = '#/musics/' + music.id;
+          $window.location.href = '#/tab/musics/' + music.id;
         }
 
         return true;
@@ -63,4 +63,12 @@ angular.module('starter.controllers', [])
 
 .controller('BadgesCtrl', function($scope, Musics) {
   $scope.selectedCount = function() { return Musics.selected().length.toString(); };
+})
+
+.controller('SelectionsCtrl', function($scope, Selections) {
+  $scope.selections = _.sortBy(Selections.all(), function(s) { return -s.date; });
+})
+
+.controller('SelectionCtrl', function($scope, $stateParams, Selections) {
+  $scope.selection = Selections.get($stateParams.selectionId);
 });
