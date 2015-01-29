@@ -16,8 +16,8 @@
     </ion-list>
 
     <div class="row" ng-class="{'display-none': selected().length == 0 }">
-      <button class="button icon-left button-outline ion-checkmark button-balanced col-50" ng-click="confirmSelection()">Confirmar Seleção</button>
-      <button class="button icon-left button-outline ion-close button-assertive col-50" ng-click="clearSelected()">Limpar Seleção</button>
+      <button class="button icon-right button-stable ion-checkmark col-50" ng-click="confirmSelection()">Confirmar Seleção</button>
+      <button class="button icon-right button-stable ion-close col-50" ng-click="clearSelected()">Limpar Seleção</button>
     </div>
 
     <div class="row" ng-class="{'display-none': selected().length > 0 }">
