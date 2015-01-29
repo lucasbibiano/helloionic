@@ -23,7 +23,6 @@ angular.module('starter.controllers', [])
   };
 
   $scope.showOpts = function(music) {
-
     var buttons = [];
 
     if (this.isSelected(music)) {
@@ -62,16 +61,6 @@ angular.module('starter.controllers', [])
   }
 })
 
-.controller('ChooseCtrl', function($scope, Friends) {
-  $scope.musics = Musics.all();
-})
-
-.controller('FriendDetailCtrl', function($scope, $stateParams, Friends) {
-  $scope.friend = Friends.get($stateParams.friendId);
-})
-
-.controller('AccountCtrl', function($scope) {
-  $scope.settings = {
-    enableFriends: true
-  };
+.controller('BadgesCtrl', function($scope, Musics) {
+  $scope.selectedCount = function() { return Musics.selected().length.toString(); };
 });
