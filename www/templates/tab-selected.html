@@ -1,26 +1,38 @@
 <ion-view view-title="Selecionadas">
   <ion-content>
-    <ion-list class="selected-list">
-      <ion-item class="item-remove-animate item-icon-right music" ng-repeat="music in selected()" type="item-text-wrap" on-hold="showOpts(music)">
-        <h2>{{music.name}}</h2>
-        <p>Artista: {{music.artist}}</p>
-        <p>Tocada pela última vez em: {{music.lastPlayed | date:'dd/MM/yyyy'}}</p>
+    <div ng-class="{'display-none': selected.length == 0 }">
 
-        <ion-scroll direction="x" class="wide-as-needed tag-list">
-          <a class="button button-small tag" ng-repeat="tag in music.tags track by $index">
-            {{tag}}
-          </a>
-        </ion-scroll>
+      <form ng-submit="confirmSelection(selection)">
+        <ion-list>
+          <label class="item item-input item-stacked-label">
+            <span class="input-label">Nome</span>
+            <input type="text" ng-model="selection.name">
+          </label>
+          <label class="item item-input item-stacked-label">
+            <span class="input-label">Data</span>
+            <input type="date" ng-model="selection.date" value="2015-01-01">
+          </label>
+          <label class="item item-input item-stacked-label">
+            <span class="input-label">Músicas</span>
+            <ul class="list">
+              <li ng-repeat="music in selected" class="item item-icon-left">
+                <button type='button' class="button button-clear button-assertive icon ion-close-circled" ng-click="unselect(music)"></button>
+                {{music.name}}
+              </a>
+            </ul>
+          </label>
+          <br>
 
-      </ion-item>
-    </ion-list>
+          <div class="row">
+            <button class="button icon-right button-stable ion-checkmark col-50">Confirmar Seleção</button>
+            <button class="button icon-right button-stable ion-close col-50" ng-click="clearSelected()">Limpar Seleção</button>
+          </div>
 
-    <div class="row" ng-class="{'display-none': selected().length == 0 }">
-      <button class="button icon-right button-stable ion-checkmark col-50" ng-click="confirmSelection()">Confirmar Seleção</button>
-      <button class="button icon-right button-stable ion-close col-50" ng-click="clearSelected()">Limpar Seleção</button>
+        </ion-list>
+      </form>
     </div>
 
-    <div class="row" ng-class="{'display-none': selected().length > 0 }">
+    <div class="row" ng-class="{'display-none': selected.length > 0 }">
       <h2>Nenhuma música selecionada</h2>
     </div>
   </ion-content>

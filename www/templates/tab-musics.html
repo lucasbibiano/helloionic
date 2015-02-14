@@ -1,34 +1,40 @@
-<ion-view view-title="Músicas | Selecionadas: {{selected().length}}">
+<ion-view view-title="Músicas | Selecionadas: {{selected.length}}">
   <ion-content>
+  
+    <div class="bar bar-header item-input-inset">
+      <label class="item-input-wrapper">
+        <i class="icon ion-ios7-search placeholder-icon"></i>
+        <input ng-model="query" type="search" placeholder="Search">
+      </label>
+      <button class="button button-clear button-stable icon ion-close" ng-click="query = null">
+      </button>
+    </div>
+
+    <div class="bar bar-header item-input-inset bar-energized" ng-click="musicForm(null)">
+      Nova Música
+    </div>
+
     <ion-list>
-      <div class="bar bar-header item-input-inset">
-        <label class="item-input-wrapper">
-          <i class="icon ion-ios7-search placeholder-icon"></i>
-          <input ng-model="query" type="search" placeholder="Search">
-        </label>
-        <button class="button button-clear button-stable icon ion-close" ng-click="query = null">
-        </button>
-      </div>
-
-      <div ng-repeat="(group, musics) in groupedMusics">
-        
-        <ion-item class="item-divider" ng-show="(musics | filter:query).length > 0">{{group}}</ion-item>
-
-        <ion-item class="item-remove-animate item-icon-right music" ng-class="{'active': isSelected(music)}" ng-repeat="music in musics | filter:query" type="item-text-wrap" on-hold="showOpts(music)">
+      <div collection-repeat="music in musics | filter: query"
+        collection-item-width="'100%'"
+        collection-item-height="130" class="music">
+        <ion-item class="item-remove-animate item-icon-right padding"
+          ng-class="{'active': isSelected(music)}" 
+          on-hold="showOpts(music)">
+          
           <h2>{{music.name}}</h2>
           <p>Artista: {{music.artist}}</p>
           <p>Tocada pela última vez em: {{music.lastPlayed | date:'dd/MM/yyyy'}}</p>
 
           <i ng-if="isSelected(music)" class="icon ion-checkmark"></i>
 
-          <ion-scroll direction="x" class="wide-as-needed tag-list">
-            <a class="button button-small button-stable tag" ng-repeat="tag in music.tags track by $index">
+          <div class="tag-list">
+            <a class="button button-small button-stable tag col-33" ng-repeat="tag in music.tags">
               {{tag}}
             </a>
-          </ion-scroll>
+          </div>
 
         </ion-item>
-
       </div>
 
     </ion-list>

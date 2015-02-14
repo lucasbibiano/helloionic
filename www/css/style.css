@@ -1,21 +1,14 @@
 /* Empty. Add your own CSS if you like */
 
-.tag-list .scroll > :first-child { margin-left: 0 !important; }
+.tag-list > :first-child { margin-left: 0 !important; }
 
 .tag-list {
   margin-top: 1em;
+  min-width: 100%;
 }
 
 .tag {
   margin-left: 1em;
-}
-
-.wide-as-needed {
-  overflow-x: scroll;
-  white-space: nowrap;
-}
-.scroll { 
-  min-width: 100%;
 }
 
 .selected-list {
@@ -24,4 +17,9 @@
 
 .display-none {
   display: none;
+}
+
+.list .music {
+  left: 0;
+  right: 0;
 }

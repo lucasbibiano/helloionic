@@ -1,0 +1,27 @@
+<div class="modal">
+  <ion-header-bar>
+    <h1 class="title">{{modal.music.name || "Nova música"}}</h1>
+  </ion-header-bar>
+  <ion-content>
+    <div class="list">
+      <label class="item item-input">
+        <span class="input-label">Nome</span>
+        <input type="text" ng-model="modal.music.name">
+      </label>
+      <label class="item item-input">
+        <span class="input-label">Artista</span>
+        <input type="text" ng-model="modal.music.artist">
+      </label>
+      <label class="item item-input">
+        <span class="input-label">Tags</span>
+        <tags-input
+          min-length="1" replace-spaces-with-dashes="false" 
+          ng-model="modal.music.tags">
+        </tags-input>
+      </label>
+    </div>
+
+    <button class="button button-full button-energized" ng-click="submitMusic(modal.music)">Salvar</button>
+    <button class="button button-full button-assertive" ng-click="closeModal()">Cancelar</button>
+  </ion-content>
+</div>

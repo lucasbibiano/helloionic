@@ -54,28 +54,87 @@ function randomMusic() {
 
 angular.module('starter.services', [])
 
-.factory('Musics', function() {
+.factory('Pouch', function($rootScope) {
+
+  var db = new PouchDB('musicapp');
+  var remoteCouch = false;
+
+  db.changes({
+    continuous: true,
+    onChange: function(change) {
+      if (!change.deleted) {
+        $rootScope.$apply(function() {
+          db.get(change.id, function(err, doc) {
+            $rootScope.$apply(function() {
+              if (err) console.log(err);
+              $rootScope.$broadcast('add', doc);
+            })
+          });
+        })
+      } 
+      else {
+        $rootScope.$apply(function() {
+          $rootScope.$broadcast('delete', change.id);
+        });
+      }
+    }
+  });
+
+  return {
+    db: function() {
+      return db;
+    }
+  };
+})
+
+.factory('Musics', function($q, Pouch) {
 
   // Some fake testing data
   var musics = [];
   var selected = [];
+  var db = Pouch.db();
 
-  _(100).times(function(i) {
+  /*_(10).times(function(i) {
     var music = randomMusic();
-    music.id = i;
-    musics.push(music);
+    music.id = "" + i;
+    music.rev = "" + (Date.now() / 1000 | 0);
+
+    db.put(music, "" + i, function callback(err, result) { console.log(err); });
   });
 
-  selected.push(musics[0]);
-  selected.push(musics[1]);
-  selected.push(musics[2]);
+  selected.push(randomMusic());
+  selected.push(randomMusic());
+  selected.push(randomMusic());*/
 
   return {
     all: function() {
-      return musics;
+      var deferred = $q.defer();
+
+      db.allDocs({include_docs: true}, function(err, response) {
+        if(err){
+          deferred.reject(err);
+        } else {
+          deferred.resolve(_.map(response.rows, function(m) { return m.doc; }));
+        }
+      });  
+
+      return deferred.promise;    
     },
-    remove: function(chat) {
-      musics.splice(musics.indexOf(chat), 1);
+    add: function(music) {
+      if (music.id == undefined || music.id == null)
+        music.id = "" + (Date.now() / 1000 | 0);
+
+      music.rev = "" + (Date.now() / 1000 | 0);
+
+      db.put(music, music.id, function callback(err, result) { console.log(err); });
+    },
+    remove: function(music) {
+      db.get(music.id).then(function(doc) {
+        return db.remove(doc);
+      })
+      .catch(function(err){
+        console.log(err);
+      });
     },
     get: function(musicId) {
       for (var i = 0; i < musics.length; i++) {
@@ -90,20 +149,18 @@ angular.module('starter.services', [])
     },
     select: function(music) {
       selected.push(music);
-      selected = _.uniq(selected, function(item) { return item.id });
-      console.log(selected);
     },
     unselect: function(music) {
-      selected = _.reject(selected, function(m) { return m.id === music.id })
+      selected.splice(selected.getIndexBy('id', music.id), 1);
     },
     clearSelected: function() {
-      selected = [];
+      selected.length = 0;
     }
   }
 })
 
 .factory('Selections', function(Musics) {
-  var selections = [];
+  var selections = selections || [];
 
   _(10).times(function(i) {
     var selection = { 
@@ -117,8 +174,9 @@ angular.module('starter.services', [])
     selection.musics = _.sample(Musics.all(), 6);
 
     selections.push(selection);
-
   });
+
+  var i = 10;
 
   return {
     all: function() {
@@ -128,6 +186,11 @@ angular.module('starter.services', [])
       return _.find(selections, function(s) {
         return s.id == id;
       });
+    },
+    add: function(s) {
+      s.id = i;
+      i += 1;
+      selections.push(s);
     }
   }
 
