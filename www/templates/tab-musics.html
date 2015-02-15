@@ -10,30 +10,30 @@
       </button>
     </div>
 
-    <div class="bar bar-header item-input-inset bar-energized" ng-click="musicForm(null)">
-      Nova Música
+    <div class="bar bar-header item-input-inset bar-stable" ng-click="musicForm(null)">
+      <i class="icon ion-plus-circled"></i>&nbsp; Nova Música
     </div>
 
     <ion-list>
-      <div collection-repeat="music in musics | filter: query"
-        collection-item-width="'100%'"
-        collection-item-height="130" class="music">
-        <ion-item class="item-remove-animate item-icon-right padding"
-          ng-class="{'active': isSelected(music)}" 
-          on-hold="showOpts(music)">
-          
-          <h2>{{music.name}}</h2>
-          <p>Artista: {{music.artist}}</p>
-          <p>Tocada pela última vez em: {{music.lastPlayed | date:'dd/MM/yyyy'}}</p>
+      <div ng-repeat="music in musics | filter: query">
+        <ion-item class="item-light"
+            ng-click="toggleSelection(music)"
+            ng-class="{active: isSelectionShown(music)}">
+            <i class="icon" ng-class="isSelectionShown(music) ? 'ion-minus' : 'ion-plus'"></i>
+          {{music.name}}
+        </ion-item>
+        
+        <ion-item ng-show="isSelectionShown(music)">
+          <p  class="item-accordion">
+            Tocada pela última vez em: {{music.lastPlayed | date: "dd/MM/yyyy"}}
+          </p>
+          <p class="item-accordion tag-list">
+            <span class="button button-light button-small tag" ng-repeat="tag in music.tags">{{tag}}</span>
+          </p>
+        </ion-item>
 
-          <i ng-if="isSelected(music)" class="icon ion-checkmark"></i>
-
-          <div class="tag-list">
-            <a class="button button-small button-stable tag col-33" ng-repeat="tag in music.tags">
-              {{tag}}
-            </a>
-          </div>
-
+        <ion-item ng-show="isSelectionShown(music)" class="item-accordion" ng-click="musicForm(music)">
+          <i class="icon ion-gear-b"></i>&nbsp; Editar {{music.name}}
         </ion-item>
       </div>
 

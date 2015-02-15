@@ -69,15 +69,6 @@ angular.module('starter', ['ionic', 'ngTagsInput', 'starter.controllers', 'start
       }
     }
   })
-    .state('tab.confirm-selection', {
-      url: '/confirm',
-      views: {
-        'tab-selected': {
-          templateUrl: 'templates/confirm-selection.html',
-          controller: 'MusicsCtrl'
-        }
-      }
-    })
 
   .state('tab.selections', {
     url: '/selections',
@@ -88,15 +79,6 @@ angular.module('starter', ['ionic', 'ngTagsInput', 'starter.controllers', 'start
       }
     }
   })
-    .state('tab.selection-detail', {
-      url: '/selections/:selectionId',
-      views: {
-        'tab-selections': {
-          templateUrl: 'templates/selection-detail.html',
-          controller: 'SelectionCtrl'
-        }
-      }
-    });
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/tab/dash');

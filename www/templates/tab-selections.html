@@ -1,10 +1,32 @@
 <ion-view view-title="Seleções">
   <ion-content>
+    <div class="bar bar-header item-input-inset bar-stable" ng-click="musicForm(null)">
+      <i class="icon ion-plus-circled"></i>&nbsp; Nova Seleção
+    </div>
     <ion-list>
-      <ion-item ng-repeat="selection in selections" href="#/tab/selections/{{selection.id}}">
-        <h2>{{selection.name}}</h2>
-        <p>{{selection.date | date:'dd/MM/yyyy'}}</p>
-      </ion-item>
+      <div ng-repeat="selection in selections">
+        <ion-item class="item-light"
+            ng-click="toggleSelection(selection)"
+            ng-class="{active: isSelectionShown(selection)}">
+            <i class="icon" ng-class="isSelectionShown(selection) ? 'ion-minus' : 'ion-plus'"></i>
+          {{selection.name}} - {{selection.date | date: 'dd/MM/yyyy'}}
+        </ion-item>
+        <ion-item class="item-accordion"
+          ng-repeat="music in selection.musics"
+          ng-show="isSelectionShown(selection)">
+          {{music}}
+        </ion-item>
+        <ion-item ng-show="isSelectionShown(selection)" class="item-accordion" ng-click="musicForm(null)">
+          <i class="icon ion-plus-circled"></i>&nbsp; Adicionar Música
+        </ion-item>
+        <ion-item ng-show="isSelectionShown(selection)" class="item-accordion" ng-click="musicForm(null)">
+          <i class="icon ion-gear-b"></i>&nbsp; Editar Seleção
+        </ion-item>
+      </div>
     </ion-list>
   </ion-content>
 </ion-view>
+
+
+
+          

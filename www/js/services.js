@@ -1,57 +1,3 @@
-function randomDate(start, end) {
-    return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
-}
-
-function randomWord(len) {
-  var vowels = ['a', 'e', 'i', 'o', 'u'];
-  var consts =  ['b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'qu', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z', 'tt', 'ch', 'sh'];
-
-  var word = '';
-
-  var is_vowel = false;
-
-  var arr;
-
-  for (var i = 0; i < len; i++) {
-
-    if (is_vowel) arr = vowels
-    else arr = consts
-    is_vowel = !is_vowel;
-
-    word += arr[Math.round(Math.random()*(arr.length-1))];
-  }
-
-  return word;
-}
-
-function randomPhrase(len) {
-  var result = "";
-  
-  _(len).times(function() {
-    result += randomWord(Math.floor((Math.random() * 10) + 1)) + " ";
-  });
-
-  return result;
-}
-
-function randomMusic() {
-  var nTags = Math.floor((Math.random() * 10) + 1);
-  var name = randomPhrase(Math.floor((Math.random() * 10) + 1));
-
-  var arr = [];
-
-  _(nTags).times(function() {
-    arr.push(randomWord(Math.floor((Math.random() * 10) + 1)));
-  });
-
-  return {
-    name: name,
-    tags: arr,
-    artist: randomPhrase(Math.floor((Math.random() * 5) + 1)),
-    lastPlayed: randomDate(new Date(2012, 0, 1), new Date())
-  }
-}
-
 angular.module('starter.services', [])
 
 .factory('Pouch', function($rootScope) {
@@ -89,22 +35,9 @@ angular.module('starter.services', [])
 
 .factory('Musics', function($q, Pouch) {
 
-  // Some fake testing data
   var musics = [];
   var selected = [];
   var db = Pouch.db();
-
-  /*_(10).times(function(i) {
-    var music = randomMusic();
-    music.id = "" + i;
-    music.rev = "" + (Date.now() / 1000 | 0);
-
-    db.put(music, "" + i, function callback(err, result) { console.log(err); });
-  });
-
-  selected.push(randomMusic());
-  selected.push(randomMusic());
-  selected.push(randomMusic());*/
 
   return {
     all: function() {
@@ -114,15 +47,22 @@ angular.module('starter.services', [])
         if(err){
           deferred.reject(err);
         } else {
-          deferred.resolve(_.map(response.rows, function(m) { return m.doc; }));
+          var result = _.filter(
+            _.map(response.rows, function(m) { return m.doc; }), function(m) {
+              return m.type == "music";
+            }
+          );
+          deferred.resolve(result);
         }
       });  
 
       return deferred.promise;    
     },
     add: function(music) {
-      if (music.id == undefined || music.id == null)
+      if (music.id == undefined || music.id == null) {
         music.id = "" + (Date.now() / 1000 | 0);
+        music.type = "music";
+      }
 
       music.rev = "" + (Date.now() / 1000 | 0);
 
@@ -159,10 +99,11 @@ angular.module('starter.services', [])
   }
 })
 
-.factory('Selections', function(Musics) {
-  var selections = selections || [];
+.factory('Selections', function($q, Pouch, Musics) {
+  var selections = [];
+  var db = Pouch.db();
 
-  _(10).times(function(i) {
+/*  _(10).times(function(i) {
     var selection = { 
       date: randomDate(new Date(2012, 0, 1), new Date()),
       name: randomPhrase(Math.floor((Math.random() * 5) + 1)),
@@ -176,21 +117,55 @@ angular.module('starter.services', [])
     selections.push(selection);
   });
 
-  var i = 10;
+  var i = 10;*/
 
   return {
     all: function() {
-      return selections;
+      var deferred = $q.defer();
+
+      db.allDocs({include_docs: true}, function(err, response) {
+        if(err){
+          deferred.reject(err);
+        } else {
+          var result = _.filter(
+            _.map(response.rows, function(s) { return s.doc; }), function(s) {
+              return s.type == "selection";
+            }
+          );
+
+          console.log(result);
+          deferred.resolve(result);
+        }
+      });
+
+      return deferred.promise;   
     },
-    get: function(id) {
-      return _.find(selections, function(s) {
-        return s.id == id;
+    add: function(selection) {
+      if (selection.id == undefined || selection.id == null) {
+        selection.id = "" + (Date.now() / 1000 | 0);
+        selection.type = "selection";
+      }
+
+      selection.rev = "" + (Date.now() / 1000 | 0);
+
+      db.put(selection, selection.id, function callback(err, result) { console.log(err); });
+    },
+    remove: function(selection) {
+      db.get(selection.id).then(function(doc) {
+        return db.remove(doc);
+      })
+      .catch(function(err){
+        console.log(err);
       });
     },
-    add: function(s) {
-      s.id = i;
-      i += 1;
-      selections.push(s);
+    get: function(id) {
+      var deferred = $q.defer();
+
+      db.get(id).then(function(doc) {
+        deferred.resolve(doc);  
+      });
+
+      return deferred.promise;
     }
   }
 

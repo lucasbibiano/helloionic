@@ -23,12 +23,14 @@ angular.module('starter.controllers', [])
   });
 
   $scope.$on('add', function(event, music) {
-    var idxMusic = $scope.musics.getIndexBy("id", music.id);
+    var idx = $scope.musics.getIndexBy("id", music.id);
 
-    if (idxMusic == -1)
+    if (music.type != "music") return;
+
+    if (idx == -1)
       $scope.musics.push(music);
     else
-      $scope.musics[idxMusic] = music;
+      $scope.musics[idx] = music;
 
     angular.copy(_.sortBy($scope.musics, function(music) {
       return music.name;
@@ -87,11 +89,15 @@ angular.module('starter.controllers', [])
   };
 
   $scope.confirmSelection = function(selection) {
-    var musicsSelected = angular.copy($scope.selected);
+    var musicsSelected = angular.copy(_.map($scope.selected, function(s) {
+      return s.name;
+    }));
     selection.musics = musicsSelected;
 
     Selections.add(selection);
     Musics.clearSelected();
+
+    selection = {};
 
     $window.location.href = "#/tab/selections";
   }
@@ -118,7 +124,6 @@ angular.module('starter.controllers', [])
         if (index === 0) {
           if (buttons[0].text == "Selecionar") {
             Musics.select(music);
-            console.log($scope.selected);
           }
           else {
             Musics.unselect(music);
@@ -138,7 +143,18 @@ angular.module('starter.controllers', [])
         return true;
       }
     });
-  }
+  };
+
+  $scope.toggleSelection = function(selection) {
+    if ($scope.isSelectionShown(selection)) {
+      $scope.shownSelection = null;
+    } else {
+      $scope.shownSelection = selection;
+    }
+  };
+  $scope.isSelectionShown = function(selection) {
+    return $scope.shownSelection === selection;
+  };
 })
 
 .controller('BadgesCtrl', function($scope, Musics) {
@@ -146,10 +162,50 @@ angular.module('starter.controllers', [])
 })
 
 .controller('SelectionsCtrl', function($scope, Selections) {
-  $scope.selections = _.sortBy(Selections.all(), function(s) { return -s.date; });
+  $scope.selections = [];
+
+  Selections.all().then(function(selections) {
+    angular.copy(_.sortBy(selections, function(s) {
+      return -s.date;
+    }), $scope.selections);
+  });
+
+  $scope.$on('add', function(event, selection) {
+    var idx = $scope.selections.getIndexBy("id", selection.id);
+
+    if (selection.type != "selection") return;
+
+    if (idx == -1)
+      $scope.selections.push(selection);
+    else
+      $scope.selections[idx] = selection;
+
+    angular.copy(_.sortBy($scope.selections, function(selection) {
+      return selection.name;
+    }), $scope.selections);
+  });
+ 
+  $scope.$on('delete', function(event, id) {
+    var idx = $scope.selections.getIndexBy("id", id);
+
+    if (idx != -1)
+      $scope.selections.splice(idx, 1);
+  });
+
+  $scope.toggleSelection = function(selection) {
+    if ($scope.isSelectionShown(selection)) {
+      $scope.shownSelection = null;
+    } else {
+      $scope.shownSelection = selection;
+    }
+  };
+  $scope.isSelectionShown = function(selection) {
+    return $scope.shownSelection === selection;
+  };
 })
 
 .controller('SelectionCtrl', function($scope, $stateParams, Selections) {
-  $scope.selection = Selections.get($stateParams.selectionId);
-  console.log($scope.selection);
+  Selections.get($stateParams.selectionId).then(function(data) {
+    $scope.selection = data;
+  });
 });
